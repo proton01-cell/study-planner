@@ -161,7 +161,6 @@
       <div class="card">
         <h2>📝 오늘의 학습 목표</h2>
         <ul id="taskList">
-          <li class="task-item">
         </ul>
       </div>
     </div>
@@ -206,7 +205,7 @@
       </div>
     </div>
 
-    <p class="footer-note">학교 봉사 프로젝트 예시: 학생들의 학습 일정과 평가 정보를 정리해 학습 효율 향상에 기여</p>
+    <p class="footer-note">학생 주도 봉사 프로젝트</p>
   </div>
 
   <script>
@@ -227,9 +226,36 @@
 
     updateCountdown();
 
+    // -----------------------------
+    // 저장 / 불러오기 기능 (localStorage)
+    // -----------------------------
+
+    function saveData() {
+      const tasks = document.getElementById("taskList").innerHTML;
+      const schedules = document.getElementById("scheduleList").innerHTML;
+      const exams = document.getElementById("examRangeList").innerHTML;
+
+      localStorage.setItem("tasks", tasks);
+      localStorage.setItem("schedules", schedules);
+      localStorage.setItem("exams", exams);
+    }
+
+    function loadData() {
+      const tasks = localStorage.getItem("tasks");
+      const schedules = localStorage.getItem("schedules");
+      const exams = localStorage.getItem("exams");
+
+      if (tasks) document.getElementById("taskList").innerHTML = tasks;
+      if (schedules) document.getElementById("scheduleList").innerHTML = schedules;
+      if (exams) document.getElementById("examRangeList").innerHTML = exams;
+    }
+
+    window.onload = loadData;
+
     function toggleDone(checkbox) {
       const text = checkbox.nextElementSibling;
       text.classList.toggle("done");
+      saveData();
     }
 
     function addItem() {
@@ -275,6 +301,8 @@
         taskList.appendChild(li);
       }
 
+      saveData();
+
       document.getElementById("subject").value = "";
       document.getElementById("content").value = "";
       document.getElementById("date").value = "";
@@ -283,6 +311,7 @@
     function removeItem(button) {
       const li = button.closest("li");
       li.remove();
+      saveData();
     }
   </script>
 </body>
