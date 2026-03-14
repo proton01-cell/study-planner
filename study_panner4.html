@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>학생 학습 관리 시스템</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #222;
+    }
+    header {
+      background: #1f3c88;
+      color: white;
+      padding: 24px 16px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0 0 8px 0;
+      font-size: 30px;
+    }
+    header p {
+      margin: 0;
+      font-size: 15px;
+      opacity: 0.95;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+    .top-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    }
+    .card h2 {
+      margin-top: 0;
+      color: #1f3c88;
+      font-size: 20px;
+    }
+    .countdown {
+      font-size: 26px;
+      font-weight: bold;
+      color: #d62828;
+      margin-top: 12px;
+    }
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 900px) {
+      .main-grid { grid-template-columns: 1fr; }
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    li {
+      padding: 10px 0;
+      border-bottom: 1px solid #e6e6e6;
+    }
+    li:last-child { border-bottom: none; }
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .done {
+      text-decoration: line-through;
+      color: gray;
+    }
+    .form-group { margin-bottom: 12px; }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #cfcfcf;
+      font-size: 14px;
+    }
+    button {
+      background: #1f3c88;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover { background: #17306e; }
+    .small-btn {
+      width: auto;
+      padding: 6px 10px;
+      font-size: 13px;
+      margin-left: 8px;
+      background: #d62828;
+    }
+    .small-btn:hover { background: #b71f1f; }
+    .schedule-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .subject-tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #e8eefc;
+      color: #1f3c88;
+      font-size: 12px;
+      font-weight: bold;
+      margin-right: 6px;
+    }
+    .footer-note {
+      text-align: center;
+      color: #666;
+      font-size: 13px;
+      margin: 24px 0 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📚 학생 학습 관리 시스템</h1>
+    <p>시험 범위 · 수행평가 일정 · 공부 계획을 한 번에 관리하는 사이트</p>
+  </header>
+
+  <div class="container">
+    <div class="top-grid">
+      <div class="card">
+        <h2>📅 다음 시험 D-day</h2>
+        <p>다가오는 시험까지 남은 날짜를 확인할 수 있습니다.</p>
+        <div class="countdown" id="countdown">계산 중...</div>
+      </div>
+
+      <div class="card">
+        <h2>📖 시험 범위</h2>
+        <ul id="examRangeList">
+          <li>
+            <div class="schedule-row">
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>📝 오늘의 학습 목표</h2>
+        <ul id="taskList">
+          <li class="task-item">
+        </ul>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <div class="card">
+        <h2>✅ 수행평가 일정</h2>
+        <ul id="scheduleList">
+          <li>
+            <div class="schedule-row">
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>➕ 일정 / 계획 추가</h2>
+
+        <div class="form-group">
+          <label for="type">추가 종류</label>
+          <select id="type">
+            <option value="schedule">수행평가 일정</option>
+            <option value="exam">시험 범위</option>
+            <option value="task">오늘의 학습 목표</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="subject">과목</label>
+          <input type="text" id="subject" placeholder="예: 수학, 영어, 화학">
+        </div>
+
+        <div class="form-group">
+          <label for="content">내용</label>
+          <input type="text" id="content" placeholder="예: 영어 발표 준비, 수학 문제집 3단원">
+        </div>
+
+        <div class="form-group">
+          <label for="date">날짜</label>
+          <input type="date" id="date">
+        </div>
+
+        <button onclick="addItem()">추가하기</button>
+      </div>
+    </div>
+
+    <p class="footer-note">학교 봉사 프로젝트 예시: 학생들의 학습 일정과 평가 정보를 정리해 학습 효율 향상에 기여</p>
+  </div>
+
+  <script>
+    const examDate = new Date("2026-04-23");
+
+    function updateCountdown() {
+      const today = new Date();
+      const diff = examDate - today;
+
+      if (diff <= 0) {
+        document.getElementById("countdown").innerText = "시험 당일입니다!";
+        return;
+      }
+
+      const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+      document.getElementById("countdown").innerText = "D-" + days;
+    }
+
+    updateCountdown();
+
+    function toggleDone(checkbox) {
+      const text = checkbox.nextElementSibling;
+      text.classList.toggle("done");
+    }
+
+    function addItem() {
+      const type = document.getElementById("type").value;
+      const subject = document.getElementById("subject").value.trim();
+      const content = document.getElementById("content").value.trim();
+      const date = document.getElementById("date").value;
+
+      if (subject === "" || content === "") {
+        alert("과목과 내용을 입력하세요.");
+        return;
+      }
+
+      if (type === "schedule") {
+        const scheduleList = document.getElementById("scheduleList");
+        const li = document.createElement("li");
+        let dateText = date ? date : "날짜 미입력";
+        li.innerHTML = `
+          <div class="schedule-row">
+            <span><span class="subject-tag">${subject}</span> ${dateText} ${content}</span>
+            <button class="small-btn" onclick="removeItem(this)">삭제</button>
+          </div>
+        `;
+        scheduleList.appendChild(li);
+      } else if (type === "exam") {
+        const examRangeList = document.getElementById("examRangeList");
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <div class="schedule-row">
+            <span><span class="subject-tag">${subject}</span> ${content}</span>
+            <button class="small-btn" onclick="removeItem(this)">삭제</button>
+          </div>
+        `;
+        examRangeList.appendChild(li);
+      } else {
+        const taskList = document.getElementById("taskList");
+        const li = document.createElement("li");
+        li.className = "task-item";
+        li.innerHTML = `
+          <input type="checkbox" onchange="toggleDone(this)">
+          <span>${subject} - ${content}</span>
+        `;
+        taskList.appendChild(li);
+      }
+
+      document.getElementById("subject").value = "";
+      document.getElementById("content").value = "";
+      document.getElementById("date").value = "";
+    }
+
+    function removeItem(button) {
+      const li = button.closest("li");
+      li.remove();
+    }
+  </script>
+</body>
+</html>
